@@ -11,25 +11,26 @@
 axios.get('https://lambda-times-backend.herokuapp.com/topics')
     .then(response => {
     console.log('Tabs Data', response) 
-    response.data.forEach( item => {
-        const para = (item);
-        parent.appendChild(button);
     })
 
     .catch(err => {
         console.log('Error', err)
     })
 
-    function Tabs(tabs){
-        const topics = document.createElement('div')
-        const title = document.createElement('span')
+function Tabs(tabs){
+    const topics = document.createElement('div')
+    const title = document.createElement('span')
 
-        topics.classList.add('topics')
-        title.classList.add('title')
+    topics.classList.add('topics')
+    title.classList.add('title')
         
-        topics.appendChild(title)
+    topics.appendChild(title)
 
-        title.textContent = `TRENDING TOPICS: ${tabs}`
+    title.textContent = `TRENDING TOPICS: ${tabs}`
 
-        return Tabs
-    }
+    return Tabs
+}
+
+const newTabs = document.querySelector('.tabs')
+
+newTabs.appendChild(Tabs)
