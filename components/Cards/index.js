@@ -18,38 +18,52 @@
 //
 // Create a card for each of the articles and add the card to the DOM.
 
-axios.get('https://lambda-times-backend.herokuapp.com/articles')
-    .then(response => {
-        
-    console.log('Cards Data', response) 
-    })
-
-    .catch(err => {
-        console.log('Error', err)
-    })
-
-const Cards = (headline, authorPhoto, authorName) => {
+function Card(headline, url, name) {
     const card = document.createElement('div')
     const headLine = document.createElement('div')
-    const author = document.createElement('div')
+    const authorContainer = document.createElement('div')
     const imgContainer = document.createElement('div')
     const img = document.createElement('img')
-    const span = document.createElement('span')
+    const author = document.createElement('span')
 
     card.classList.add('card')
     headLine.classList.add('headline')
-    author.classList.add('author')
+    authorContainer.classList.add('author')
     imgContainer.classList.add('img-container')
 
-    card.appendChild(headLine)
-    card.appendChild(author)
-    author.appendChild(imgContainer)
-    author.appendChild(span)
-    imgContainer.appendChild(img)
-
     headLine.textContent = headline
-    img.src = authorPhoto
-    span.textContent = authorName
+    img.src = url
+    author.innerHTML = `By ${name}`
 
-    return Cards
+    imgContainer.appendChild(img)
+    authorContainer.append(imgContainer, author)
+    card.append(headLine, authorContainer)
+
+    return card
 }
+
+axios.get('https://lambda-times-backend.herokuapp.com/articles')
+    .then(res => {
+    console.log(res);
+    const data = res.data.articles
+    articleTypes = [
+        data.javascript,
+        data.bootstrap,
+        data.technology,
+        data.jquery,
+        data.nod
+    ]
+    console.log(articleTypes);
+    })
+    .then(() => {
+    const cardContainer = document.querySelector('.cards-container')
+    articleTypes.forEach(articles => {
+        articles.forEach(article => {
+        cardContainer.append(
+            Card(article.headline, article.authorPhoto, article.authorName)
+        )
+        }
+        )
+    })
+    })
+    .catch(err => console.log(err))
